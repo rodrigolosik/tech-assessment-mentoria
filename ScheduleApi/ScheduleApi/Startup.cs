@@ -1,3 +1,4 @@
+using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using ScheduleApi.Infrastructure;
 using ScheduleApi.Infrastructure.Entitys;
 using ScheduleApi.Validators;
+using System;
 
 namespace ScheduleApi
 {
@@ -27,15 +29,15 @@ namespace ScheduleApi
             services.AddSwaggerGen();
             var connection = Configuration.GetConnectionString("DefaultConnection");
 
-            services.AddDbContext<DataContext>(options =>
-                               options.UseSqlite(
-                                     connection
-                                ));
+            services.AddDbContext<DataContext>(options => options.UseSqlite(connection));
 
             services.AddTransient(typeof(IRepositoryAsync<>), typeof(RepositoryAsync<>));
             services.AddTransient<IScheduleRepository, ScheduleRepository>();
             services.AddTransient<ISlotRepository, SlotRepository>();
             services.AddTransient<AbstractValidator<Schedule>, ScheduleValidator>();
+            services.AddTransient<AbstractValidator<Slot>, SlotValidator>();
+            services.AddAutoMapper(config => config.ValidateInlineMaps = false, AppDomain.CurrentDomain.GetAssemblies());
+            services.AddValidatorsFromAssemblyContaining<ScheduleValidator>(ServiceLifetime.Transient);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

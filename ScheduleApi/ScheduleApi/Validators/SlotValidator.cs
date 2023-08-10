@@ -1,6 +1,6 @@
-﻿using System;
-using FluentValidation;
+﻿using FluentValidation;
 using ScheduleApi.Infrastructure.Entitys;
+using System;
 
 namespace ScheduleApi.Validators
 {
@@ -10,11 +10,16 @@ namespace ScheduleApi.Validators
         public SlotValidator()
         {
             RuleFor(c => c.DateStart)
-                .Must((date) => IsValid(date)).WithMessage("Invalid Start Date." + errorMessage);
+                .Must((date) => IsValid(date))
+                .WithMessage("Invalid Start Date." + errorMessage);
+
             RuleFor(c => c.DateEnd)
-               .Must((date) => IsValid(date)).WithMessage("Invalid End Date." + errorMessage);
+               .Must((date) => IsValid(date))
+               .WithMessage("Invalid End Date." + errorMessage);
+
             RuleFor(c => c)
-             .Must((slot) => IsValid(slot.DateStart, slot.DateEnd)).WithMessage("Invalid slot" + errorMessage);
+             .Must((slot) => IsValid(slot.DateStart, slot.DateEnd))
+             .WithMessage("Invalid slot" + errorMessage);
 
         }
 

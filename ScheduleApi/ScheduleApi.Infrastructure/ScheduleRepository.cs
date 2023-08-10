@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore;
+using ScheduleApi.Infrastructure.Entitys;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using ScheduleApi.Infrastructure.Entitys;
 
 namespace ScheduleApi.Infrastructure
 {
@@ -16,8 +16,11 @@ namespace ScheduleApi.Infrastructure
 
         public async Task<List<Slot>> GetSlots(string candidateName, List<string> interviewerNames)
         {
-            var result = new List<Slot>();
             var candidateSchedule = await GetSchedule(candidateName, "Candidate");
+
+            if (candidateSchedule is null) return null;
+
+            var result = new List<Slot>();
             var all = new List<List<Slot>>();
             // for each interviewer create a list of slots
             foreach (var name in interviewerNames)
